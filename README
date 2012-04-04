@@ -1,22 +1,23 @@
 
-=== Introduction ===
+		=== Introduction ===
 
 This program is a part of thesis project with Professor Luigi Ciminiera of Politecnico di Torino.
 
 StegoSIP allocates a point-to-point IP tunnel between two hosts, hiding traffic into SIP/RTP protocol with LSB/LACK steganographic methods. This software is currently under heavy development.
 
-= Download ad Install =
+		== Download ad Install ==
+
 In an Ubuntu/Debian Linux, first install libraries 
 
    $ sudo apt-get install nfqueue-bindings-python python-dpkt
 
-Download code n both tunnel endpoints PC-Alice and PC-Bob. Then,
+Download stegosip in both tunnel endpoints PC-Alice and PC-Bob. Then,
 assign different tunnel IP addresses to PC-Alice and PC-Bob
 
    pc-alice$ gedit stegosip.conf        # set Alice IP option address as 10.0.0.1
-   pc-bob$ gedit stegosip.conf        # set Bob IP address as 10.0.0.2
+   pc-bob$ gedit stegosip.conf          # set Bob IP address as 10.0.0.2
 
-= Create steganographic tunnel = 
+		== Initialize tunnel = 
 
 Start StegoSIP in Alice and Bob hosts
 
@@ -25,7 +26,8 @@ Start StegoSIP in Alice and Bob hosts
 
 Stegosip automatically wait for incoming or ougoing SIP call. When it detect a RTP stream establishment, initialize in both endpoint stego0 tunnel interface to permit steganographic communication.
 
-= Example =
+		== Example ==
+
 Alice and Bob can run their favourite SIP phone (tested with ekiga) and make their calls. StegoSIP intercept outgoing RTP connection and start a stego0 interface, that you can use to communicate with other endpoint. Typical StegoSIP output (with comments):
 
    pc-alice$ sudo ./stegosip.py
@@ -33,8 +35,8 @@ Alice and Bob can run their favourite SIP phone (tested with ekiga) and make the
    # Load filter to incercept incoming and outgoing SIP calls
    [SIP] added dissector and netfilter rules on udp 5060 ports.
    # Outgoing-call between alice and bob intercepted 
-   [SIP] [OUTGOING-CALL:647604] alice@192.168.1.3->bob@192.168.1.4 [ local: INVITE ] 
-   [SIP] [OUTGOING-CALL-ESTABILISHED:647604] alice@192.168.1.3->bob@192.168.1.4 [ remote:200 OK ] 
+   [SIP] [OUTGOING-CALL:647604] alice@192.168.1.3->bob@192.168.1.4 
+   [SIP] [OUTGOING-CALL-ESTAB:647604] alice@192.168.1.3->bob@192.168.1.4 
    # Extract RTP port and other parameters from collected SDP
    [SDP] local: 192.168.1.3:5072 remote:192.168.1.4:5076 
    # Load filter to intercept RTP connection
