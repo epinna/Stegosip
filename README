@@ -5,9 +5,9 @@ This program is a part of thesis project with Professor Luigi Ciminiera of Polit
 
 StegoSIP allocates a point-to-point IP tunnel between two hosts, hiding traffic into SIP/RTP protocol with LSB/LACK steganographic methods. This software is currently under heavy development.
 
-		== Download ad Install ==
+		== Download and Install ==
 
-In an Ubuntu/Debian Linux, first install libraries 
+In an Ubuntu/Debian Linux, first install libraries
 
    $ sudo apt-get install nfqueue-bindings-python python-dpkt
 
@@ -17,18 +17,18 @@ assign different tunnel IP addresses to PC-Alice and PC-Bob
    pc-alice$ gedit stegosip.conf        # set Alice IP option address as 10.0.0.1
    pc-bob$ gedit stegosip.conf          # set Bob IP address as 10.0.0.2
 
-		== Initialize tunnel = 
+		== Initialize tunnel =
 
 Start StegoSIP in Alice and Bob hosts
 
    pc-alice$ sudo ./stegosip.py
    pc-bob$ sudo ./stegosip.py
 
-Stegosip automatically wait for incoming or ougoing SIP call. When it detect a RTP stream establishment, initialize in both endpoint stego0 tunnel interface to permit steganographic communication.
+Stegosip automatically waits for incoming or outgoing SIP call. When it detects a RTP stream establishment, it initializes stego0 tunnel interface in both endpoints to permit steganographic communication.
 
 		== Example ==
 
-Alice and Bob can run their favourite SIP phone (tested with ekiga) and make their calls. StegoSIP intercept outgoing RTP connection and start a stego0 interface, that you can use to communicate with other endpoint. Typical StegoSIP output (with comments):
+Alice and Bob can run their favourite SIP phone (tested with ekiga) and make their calls. StegoSIP intercepts outgoing RTP connection and starts a stego0 interface, that you can use to communicate with other endpoint. Typical StegoSIP output (with comments):
 
    pc-alice$ sudo ./stegosip.py
 
@@ -46,7 +46,7 @@ Alice and Bob can run their favourite SIP phone (tested with ekiga) and make the
    # Module to inject and extract data from tunnel loaded.
    [RTP] Injector 'LACK' module loaded
 
-From now, alice e bob can communicate using 10.0.0.1 and 10.0.0.2 hosts.
+From now, alice and bob can communicate using 10.0.0.1 and 10.0.0.2 hosts.
 
    pc-alice$ ping 10.0.0.2
 
