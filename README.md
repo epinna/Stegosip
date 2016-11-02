@@ -1,7 +1,7 @@
 Stegosip
 ========
 
-This software was part of the dissertation that I presented the 21/06/2011 for the master degree in computer engineering under the title “Steganography over SIP/RTP protocols”. The work was conducted under the supervision of professor Luigi Ciminiera at the Politecnico di Torino.
+This software was part of the dissertation that I presented the 04/07/2011 for the master degree in computer engineering under the title “Steganography over SIP/RTP protocols”. The work was conducted under the supervision of professor Luigi Ciminiera at the Politecnico di Torino.
 
 StegoSIP covers an IP tunnel into SIP/RTP protocol using LSB and LACK steganographic methods. The hidden channel is a point-to-point IP tunnel between the two peers communicating via the SIP call.
 
