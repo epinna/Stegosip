@@ -1,56 +1,81 @@
+Stegosip
+========
 
-		=== Introduction ===
+This software was part of the dissertation that I presented the 21/06/2011 for the master degree in computer engineering under the title “Steganography over SIP/RTP protocols”. The work was conducted under the supervision of professor Luigi Ciminiera at the Politecnico di Torino.
 
-This program is a part of thesis project with Professor Luigi Ciminiera of Politecnico di Torino.
+StegoSIP covers an IP tunnel into SIP/RTP protocol using LSB and LACK steganographic methods. The hidden channel is a point-to-point IP tunnel between the two peers communicating via the SIP call.
 
-StegoSIP allocates a point-to-point IP tunnel between two hosts, hiding traffic into SIP/RTP protocol with LSB/LACK steganographic methods. This software is currently under heavy development.
+Install
+-------
 
-		== Download and Install ==
+Install the required dependencies.
 
-In an Ubuntu/Debian Linux, first install libraries
+```bash
+$ sudo apt-get install nfqueue-bindings-python python-dpkt
+```
 
-   $ sudo apt-get install nfqueue-bindings-python python-dpkt
+Download StegoSIP in both endpoints PC-Alice and PC-Bob. Make sure to specify the tunnel IP addresses of the two endpoints as shown below.
 
-Download stegosip in both tunnel endpoints PC-Alice and PC-Bob. Then,
-assign different tunnel IP addresses to PC-Alice and PC-Bob
+```bash
+# On PC-Alice
+$ gedit stegosip.conf        # set Alice IP option address as 10.0.0.1
+```
 
-   pc-alice$ gedit stegosip.conf        # set Alice IP option address as 10.0.0.1
-   pc-bob$ gedit stegosip.conf          # set Bob IP address as 10.0.0.2
+```bash
+# On PC-Bob
+$ gedit stegosip.conf          # set Bob IP address as 10.0.0.2
+```
 
-		== Initialize tunnel =
+Usage
+-----
 
 Start StegoSIP in Alice and Bob hosts
 
-   pc-alice$ sudo ./stegosip.py
-   pc-bob$ sudo ./stegosip.py
+```bash
+# On PC-Alice
+$ sudo ./stegosip.py
+```
 
-Stegosip automatically waits for incoming or outgoing SIP call. When it detects a RTP stream establishment, it initializes stego0 tunnel interface in both endpoints to permit steganographic communication.
+```bash
+# On PC-Bob
+$ sudo ./stegosip.py
+```
 
-		== Example ==
+StegoSIP starts inspecting the SIP traffic on the machines waiting for inbound or outbound SIP calls. When it detects a RTP stream, it would raise a stego0 network interface in both endpoints which can be used as a private hidden network between the peers.
 
-Alice and Bob can run their favourite SIP phone (tested with ekiga) and make their calls. StegoSIP intercepts outgoing RTP connection and starts a stego0 interface, that you can use to communicate with other endpoint. Typical StegoSIP output (with comments):
+Example
+-------
 
-   pc-alice$ sudo ./stegosip.py
+The software is SIP client agnostic, but has been tested with Ekiga. Find below a commented example of an outgoing call from PC-Alice to PC-Bob which is used to establish the covert channel.
 
-   # Load filter to incercept incoming and outgoing SIP calls
-   [SIP] added dissector and netfilter rules on udp 5060 ports.
-   # Outgoing-call between alice and bob intercepted 
-   [SIP] [OUTGOING-CALL:647604] alice@192.168.1.3->bob@192.168.1.4 
-   [SIP] [OUTGOING-CALL-ESTAB:647604] alice@192.168.1.3->bob@192.168.1.4 
-   # Extract RTP port and other parameters from collected SDP
-   [SDP] local: 192.168.1.3:5072 remote:192.168.1.4:5076 
-   # Load filter to intercept RTP connection
-   [RTP] added dissector and netfilter rules on udp 5072<->5076 ports.
-   # Starting stego0 interface with ip 10.0.0.1
-   [TUN] Started Interface stego0 up 10.0.0.1 netmask 255.255.255.0 mtu 1392
-   # Module to inject and extract data from tunnel loaded.
-   [RTP] Injector 'LACK' module loaded
+```bash
+# PC-Alice. 
+# The command must be run on PC-Bob as well.
+$ sudo ./stegosip.py
 
-From now, alice and bob can communicate using 10.0.0.1 and 10.0.0.2 hosts.
+# Load filter to incercept incoming and outgoing SIP calls
+[SIP] added dissector and netfilter rules on udp 5060 ports.
+# Outgoing-call between alice and bob intercepted 
+[SIP] [OUTGOING-CALL:647604] alice@192.168.1.3->bob@192.168.1.4 
+[SIP] [OUTGOING-CALL-ESTAB:647604] alice@192.168.1.3->bob@192.168.1.4 
+# Extract RTP port and other parameters from collected SDP
+[SDP] local: 192.168.1.3:5072 remote:192.168.1.4:5076 
+# Load filter to intercept RTP connection
+[RTP] added dissector and netfilter rules on udp 5072<->5076 ports.
+# Starting stego0 interface with ip 10.0.0.1
+[TUN] Started Interface stego0 up 10.0.0.1 netmask 255.255.255.0 mtu 1392
+# Module to inject and extract data from tunnel loaded.
+[RTP] Injector 'LACK' module loaded
+```
 
-   pc-alice$ ping 10.0.0.2
+Alice and Bob can now communicate using 10.0.0.1 and 10.0.0.2 hosts.
 
-   PING 10.0.0.2 (10.0.0.2) 56(84) bytes of data.
-   64 bytes from 10.0.0.2: icmp_req=1 ttl=64 time=50.1 ms
-   64 bytes from 10.0.0.2: icmp_req=2 ttl=64 time=58.7 ms
-   ...
+```bash
+# PC-Alice
+$ ping 10.0.0.2
+
+PING 10.0.0.2 (10.0.0.2) 56(84) bytes of data.
+64 bytes from 10.0.0.2: icmp_req=1 ttl=64 time=50.1 ms
+64 bytes from 10.0.0.2: icmp_req=2 ttl=64 time=58.7 ms
+...
+```
