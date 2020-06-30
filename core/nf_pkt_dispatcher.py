@@ -42,7 +42,7 @@ class nf_pkt_dispatcher(asyncore.file_dispatcher):
 
 
 
-    def cb(self,i,nf_payload):
+    def cb(self, nf_payload):
         """
         Callback function of packet processing.
 
